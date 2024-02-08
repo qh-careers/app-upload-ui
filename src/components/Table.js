@@ -1,10 +1,9 @@
-import React,{useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../Table.css";
 import FileUpload from './upload';
 
 const Table = () => {
-
   const [apps, setApps] = useState([]);
   const [error, setError] = useState(null);
 
@@ -41,12 +40,12 @@ const Table = () => {
           </tr>
         </thead>
         <tbody>
-        {apps && apps.map((app, index) => (
+          {apps.map((app, index) => (
             <TableRow
               key={index}
-              appInstanceName={app.inst_name}
-              appName={app.name}
-              description={app.desc}
+              appInstanceName={app.instance_name}
+              appName={app.app_name}
+              description={app.description}
             />
           ))}
         </tbody>
