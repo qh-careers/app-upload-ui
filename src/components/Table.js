@@ -26,6 +26,8 @@ const Table = () => {
     fetchApps();
   }, []);
 
+ 
+
   return (
     <div className="table-container">
       <FileUpload setApps={setApps} />
@@ -55,10 +57,30 @@ const Table = () => {
 };
 
 const TableRow = ({ appInstanceName, appName, description }) => {
+
+   
+  const handlePlayButtonClick = async (appName) => {
+    try {
+        const response = await fetch(`https://127.0.0.1:5000/apps/${appName}/run`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (response.ok) {
+            console.log('Play button clicked successfully');
+            // Handle successful response if needed
+        } else {
+            console.error('Failed to handle play button click:', response.statusText);
+        }
+    } catch (error) {
+        console.error('Error handling play button click:', error);
+    } 
+};
   return (
     <tr>
       <td>
-        <Link to="/form">
+        <Link to="/form" state={{appName:appName}}>
           <div className="app">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -84,7 +106,7 @@ const TableRow = ({ appInstanceName, appName, description }) => {
       <td>{appName}</td>
       <td>{description}</td>
       <td>
-        <Link to="/form">
+        <Link to="/form" state={{appName:appName}}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="40"
@@ -104,9 +126,11 @@ const TableRow = ({ appInstanceName, appName, description }) => {
       </td>
       <td>
         <svg
+        style={{cursor:'pointer'}}
+          onClick={()=>{handlePlayButtonClick(appName)}}
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="40"
+          height="40"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
