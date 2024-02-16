@@ -64,7 +64,7 @@ const TableRow = ({ appInstanceName, appName, description, handlePlayButtonClick
   return (
     <tr>
       <td>
-        <Link to="/form">
+        <Link to="/form" state={{appName:appName}}>
           <div className="app">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +90,7 @@ const TableRow = ({ appInstanceName, appName, description, handlePlayButtonClick
       <td>{appName}</td>
       <td>{description}</td>
       <td>
-        <Link to="/form">
+        <Link to="/form"state={{appName:appName}}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="40"

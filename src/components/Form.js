@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import '../App.css';
 import './Form.css';
+import { useLocation } from 'react-router-dom';
 
 function Form() {
     const [formData, setFormData] = useState({});
     const [loading, setLoading] = useState(false);
 
+    const location=useLocation();
+    const {appName}=location.state;
+    // console.log(appName);
+
     useEffect(() => {
         // Fetch the plugin_config from the backend
-        fetchPluginConfig("Instagram")
+        fetchPluginConfig(`${appName}`)
             .then(pluginConfig => {
                 if (pluginConfig) {
                     setFormData(pluginConfig);
