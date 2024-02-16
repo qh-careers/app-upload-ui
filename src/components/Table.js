@@ -26,7 +26,10 @@ const Table = () => {
     fetchApps();
   }, []);
 
- 
+  const handlePlayButtonClick = (appName) => {
+    // Implement the functionality for the play button click
+    console.log(`Play button clicked for app: ${appName}`);
+  };
 
   return (
     <div className="table-container">
@@ -48,6 +51,7 @@ const Table = () => {
               appInstanceName={app.instance_name}
               appName={app.app_name}
               description={app.description}
+              handlePlayButtonClick={handlePlayButtonClick}
             />
           ))}
         </tbody>
@@ -56,31 +60,11 @@ const Table = () => {
   );
 };
 
-const TableRow = ({ appInstanceName, appName, description }) => {
-
-   
-  const handlePlayButtonClick = async (appName) => {
-    try {
-        const response = await fetch(`https://127.0.0.1:5000/apps/${appName}/run`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        if (response.ok) {
-            console.log('Play button clicked successfully');
-            // Handle successful response if needed
-        } else {
-            console.error('Failed to handle play button click:', response.statusText);
-        }
-    } catch (error) {
-        console.error('Error handling play button click:', error);
-    } 
-};
+const TableRow = ({ appInstanceName, appName, description, handlePlayButtonClick }) => {
   return (
     <tr>
       <td>
-        <Link to="/form" state={{appName:appName}}>
+        <Link to="/form">
           <div className="app">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +90,7 @@ const TableRow = ({ appInstanceName, appName, description }) => {
       <td>{appName}</td>
       <td>{description}</td>
       <td>
-        <Link to="/form" state={{appName:appName}}>
+        <Link to="/form">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="40"
@@ -126,11 +110,10 @@ const TableRow = ({ appInstanceName, appName, description }) => {
       </td>
       <td>
         <svg
-        style={{cursor:'pointer'}}
-          onClick={()=>{handlePlayButtonClick(appName)}}
+          onClick={() => handlePlayButtonClick(appName)}
           xmlns="http://www.w3.org/2000/svg"
-          width="40"
-          height="40"
+          width="24"
+          height="24"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -138,6 +121,7 @@ const TableRow = ({ appInstanceName, appName, description }) => {
           strokeLinecap="round"
           strokeLinejoin="round"
           className="lucide lucide-play"
+          style={{ cursor: "pointer" }}
         >
           <polygon points="5 3 19 12 5 21 5 3" />
         </svg>

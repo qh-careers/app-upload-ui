@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, send_from_directory
-from flask_cors import CORS
+from flask_cors import CORS  # Import CORS from flask_cors module
 import os
 import zipfile
 import yaml
@@ -9,9 +9,7 @@ from pymongo import MongoClient
 import uuid
 
 app = Flask(__name__)
-CORS(app)
-
-apps = []
+CORS(app) 
 
 # Initialize MongoClient
 client = MongoClient('mongodb+srv://saajidvbasheer:qB2jA5eeYystkoZt@cluster0.dtyyneb.mongodb.net/')
@@ -108,18 +106,23 @@ def get_config(app_name):
         return jsonify({'error': 'Internal server error'}), 500
 
 
-@app.route('/apps/<app_name>/config', methods=['POST'])
+@app.route('/apps/<app_name>/saveconfig', methods=['POST'])
 def save_config(app_name):
-    config_data = request.json.get('plugin_config', []) # Get the config array from the request
-    collection_name = "extension_definition"
-    uuid_short = str(uuid.uuid4())[:8]  # Replace with your actual collection name
-    collection_uuid = f"{collection_name}_{uuid_short}"
+    config_data = request.json # Get the config array from the request
     print("Config data:", config_data)
+
+    extension_confi = config_collection.find_one({'app_name': app_name})
+    if extension_confi:
+        extension_id = extension_confi.get('id')
     
     # Save the config data to MongoDB
-    config_collection.update_one({'id': collection_uuid,'app_name': app_name}, {'$set': {'plugin_config':config_data}}, upsert=True)
-    extension_config.insert_one({'id' : collection_uuid})
+    extension_config.update_one({'id': extension_id}, {'$set': {'plugin_config':config_data}}, upsert=True)
     return jsonify({"message": config_data}), 200
+
+@app.route('/apps/<app_name>/run', methods=['POST'])
+def run_app(app_name):
+    # Perform actions to run the app
+    return jsonify({"message": f"App '{app_name}' is now running."}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
